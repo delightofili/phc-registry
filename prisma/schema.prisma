@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum BloodGroup {
+  A_POSITIVE
+  A_NEGATIVE
+  B_POSITIVE
+  B_NEGATIVE
+  AB_POSITIVE
+  AB_NEGATIVE
+  O_POSITIVE
+  O_NEGATIVE
+}
+
+model Phc {
+  id        String    @id @default(uuid())
+  name      String
+  lga       String
+  state     String
+  createdAt DateTime  @default(now())
+  patients  Patient[]
+
+  @@unique([name, lga])
+}
+
+model Patient {
+  id             String      @id @default(uuid())
+  fullName       String
+  dateOfBirth    DateTime    @db.Date
+  gender         Gender
+  phone          String?
+  village        String
+  lga            String
+  state          String
+  nextOfKinName  String
+  nextOfKinPhone String
+  nhisNumber     String?     @unique
+  bloodGroup     BloodGroup?
+  allergies      String?
+  registeredAt   DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  phcId String
+  phc   Phc    @relation(fields: [phcId], references: [id])
+
+  @@index([fullName])
+  @@index([village])
+  @@index([lga])
+  @@index([phone])
+  @@index([phcId])
+}
