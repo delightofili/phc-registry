@@ -24,18 +24,21 @@ enum BloodGroup {
 }
 
 model Phc {
-  id        String    @id @default(uuid())
-  name      String
-  lga       String
-  state     String
-  createdAt DateTime  @default(now())
-  patients  Patient[]
+  id             String    @id @default(uuid())
+  name           String
+  code           String    @unique
+  lga            String
+  state          String
+  patientCounter Int       @default(0)
+  createdAt      DateTime  @default(now())
+  patients       Patient[]
 
   @@unique([name, lga])
 }
 
 model Patient {
   id             String      @id @default(uuid())
+  cardNumber     String      @unique
   fullName       String
   dateOfBirth    DateTime    @db.Date
   gender         Gender
@@ -48,15 +51,37 @@ model Patient {
   nhisNumber     String?     @unique
   bloodGroup     BloodGroup?
   allergies      String?
-  registeredAt   DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
 
-  phcId String
-  phc   Phc    @relation(fields: [phcId], references: [id])
+  para       Int?
+  gravida    Int?
+  isPregnant Boolean @default(false)
+
+  registeredAt DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  phcId         String
+  phc           Phc                  @relation(fields: [phcId], references: [id])
+  immunizations ImmunizationRecord[]
 
   @@index([fullName])
   @@index([village])
   @@index([lga])
   @@index([phone])
   @@index([phcId])
+  @@index([isPregnant])
+}
+
+model ImmunizationRecord {
+  id          String    @id @default(uuid())
+  vaccineName String
+  doseNumber  Int       @default(1)
+  dateGiven   DateTime  @db.Date
+  nextDueDate DateTime? @db.Date
+  createdAt   DateTime  @default(now())
+
+  patientId String
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@index([patientId])
+  @@index([nextDueDate])
 }
