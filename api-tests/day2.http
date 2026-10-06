@@ -1,0 +1,377 @@
+@baseUrl = http://localhost:3000
+@phcId = {{phcs.response.body.$[0].id}}
+
+### 0. Get PHCs
+# @name phcs
+GET {{baseUrl}}/api/phcs
+
+
+### 1. Pregnant woman
+POST {{baseUrl}}/api/patients
+Content-Type: application/json
+
+{
+  "fullName": "Ngozi Okafor",
+  "dateOfBirth": "1995-06-14",
+  "gender": "FEMALE",
+  "phone": "08031234567",
+  "village": "Ifite",
+  "lga": "Awka North",
+  "state": "Anambra",
+  "nextOfKinName": "Chidi Okafor",
+  "nextOfKinPhone": "08051234567",
+  "bloodGroup": "O_POSITIVE",
+  "para": 1,
+  "gravida": 3,
+  "isPregnant": true,
+  "phcId": "{{phcId}}"
+}
+
+### 2. Toddler with vaccines
+POST {{baseUrl}}/api/patients
+Content-Type: application/json
+
+{
+  "fullName": "Chiamaka Eze",
+  "dateOfBirth": "2025-08-01",
+  "gender": "FEMALE",
+  "village": "Amansea",
+  "lga": "Awka North",
+  "state": "Anambra",
+  "nextOfKinName": "Ada Eze",
+  "nextOfKinPhone": "08061234567",
+  "phcId": "{{phcId}}",
+  "immunizations": [
+    { "vaccineName": "BCG", "doseNumber": 1, "dateGiven": "2025-08-02" },
+    { "vaccineName": "Penta", "doseNumber": 1, "dateGiven": "2025-09-15", "nextDueDate": "2025-10-27" }
+  ]
+}
+
+### 3. Infant 
+POST {{baseUrl}}/api/patients
+Content-Type: application/json
+
+{
+  "fullName": "Uche Nwosu",
+  "dateOfBirth": "2026-06-10",
+  "gender": "MALE",
+  "village": "Nawfia",
+  "lga": "Awka North",
+  "state": "Anambra",
+  "nextOfKinName": "Ifeoma Nwosu",
+  "nextOfKinPhone": "08071234567",
+  "phcId": "{{phcId}}",
+  "immunizations": [
+    { "vaccineName": "BCG", "dateGiven": "2026-06-11" }
+  ]
+}
+
+### 4. Adult man with NHIS number 
+POST {{baseUrl}}/api/patients
+Content-Type: application/json
+
+{
+  "fullName": "Obiora Nwankwo",
+  "dateOfBirth": "1985-03-20",
+  "gender": "MALE",
+  "phone": "+2348091234567",
+  "village": "Umuawulu",
+  "lga": "Awka South",
+  "state": "Anambra",
+  "nextOfKinName": "Nneka Nwankwo",
+  "nextOfKinPhone": "08121234567",
+  "nhisNumber": "NHIS-001",
+  "allergies": "Penicillin",
+  "phcId": "{{phcId}}"
+}
+
+
+#
+
+### 5. Same person as #1 
+POST {{baseUrl}}/api/patients
+Content-Type: application/json
+
+{
+  "fullName": "ngozi okafor",
+  "dateOfBirth": "1995-06-14",
+  "gender": "FEMALE",
+  "village": "IFITE",
+  "lga": "Awka North",
+  "state": "Anambra",
+  "nextOfKinName": "Chidi Okafor",
+  "nextOfKinPhone": "08051234567",
+  "phcId": "{{phcId}}"
+}
+
+### 6. Same as #5 but nurse confirms it is a different person
+POST {{baseUrl}}/api/patients
+Content-Type: application/json
+
+{
+  "fullName": "Ngozi Okafor",
+  "dateOfBirth": "1995-06-14",
+  "gender": "FEMALE",
+  "village": "Ifite",
+  "lga": "Awka North",
+  "state": "Anambra",
+  "nextOfKinName": "Emeka Okafor",
+  "nextOfKinPhone": "08051230000",
+  "phcId": "{{phcId}}",
+  "confirmDuplicate": true
+}
+
+### 7. Different person, SAME NHIS as #4
+POST {{baseUrl}}/api/patients
+Content-Type: application/json
+
+{
+  "fullName": "Tunde Adeyemi",
+  "dateOfBirth": "1979-11-02",
+  "gender": "MALE",
+  "village": "Nkwelle Ezunaka",
+  "lga": "Oyi",
+  "state": "Anambra",
+  "nextOfKinName": "Bisi Adeyemi",
+  "nextOfKinPhone": "08031119999",
+  "nhisNumber": "NHIS-001",
+  "phcId": "{{phcId}}"
+}
+
+
+### 8. Man marked pregnant with para
+POST {{baseUrl}}/api/patients
+Content-Type: application/json
+
+{
+  "fullName": "Musa Ibrahim",
+  "dateOfBirth": "1990-01-01",
+  "gender": "MALE",
+  "village": "Amansea",
+  "lga": "Awka North",
+  "state": "Anambra",
+  "nextOfKinName": "Aisha Ibrahim",
+  "nextOfKinPhone": "08071234567",
+  "isPregnant": true,
+  "para": 2,
+  "phcId": "{{phcId}}"
+}
+
+### 9. 10-year-old girl with gravida
+POST {{baseUrl}}/api/patients
+Content-Type: application/json
+
+{
+  "fullName": "Amara Obi",
+  "dateOfBirth": "2016-01-01",
+  "gender": "FEMALE",
+  "village": "Ifite",
+  "lga": "Awka North",
+  "state": "Anambra",
+  "nextOfKinName": "Obi Sr",
+  "nextOfKinPhone": "08071234567",
+  "gravida": 1,
+  "phcId": "{{phcId}}"
+}
+
+### 10. Para more than gravida
+POST {{baseUrl}}/api/patients
+Content-Type: application/json
+
+{
+  "fullName": "Folake Bello",
+  "dateOfBirth": "1992-04-04",
+  "gender": "FEMALE",
+  "village": "Ifite",
+  "lga": "Awka North",
+  "state": "Anambra",
+  "nextOfKinName": "Tunde Bello",
+  "nextOfKinPhone": "08071234567",
+  "para": 5,
+  "gravida": 2,
+  "phcId": "{{phcId}}"
+}
+
+### 11. Bad phone number
+POST {{baseUrl}}/api/patients
+Content-Type: application/json
+
+{
+  "fullName": "Kelechi Anyanwu",
+  "dateOfBirth": "1988-08-08",
+  "gender": "MALE",
+  "phone": "123",
+  "village": "Ifite",
+  "lga": "Awka North",
+  "state": "Anambra",
+  "nextOfKinName": "Ada Anyanwu",
+  "nextOfKinPhone": "08071234567",
+  "phcId": "{{phcId}}"
+}
+
+### 12. Date of birth in the future
+POST {{baseUrl}}/api/patients
+Content-Type: application/json
+
+{
+  "fullName": "Future Baby",
+  "dateOfBirth": "2030-01-01",
+  "gender": "MALE",
+  "village": "Ifite",
+  "lga": "Awka North",
+  "state": "Anambra",
+  "nextOfKinName": "Parent",
+  "nextOfKinPhone": "08071234567",
+  "phcId": "{{phcId}}"
+}
+
+### 13. Impossible date, Feb 31 
+POST {{baseUrl}}/api/patients
+Content-Type: application/json
+
+{
+  "fullName": "Date Tester",
+  "dateOfBirth": "2025-02-31",
+  "gender": "MALE",
+  "village": "Ifite",
+  "lga": "Awka North",
+  "state": "Anambra",
+  "nextOfKinName": "Parent",
+  "nextOfKinPhone": "08071234567",
+  "phcId": "{{phcId}}"
+}
+
+### 14. Missing almost everything
+POST {{baseUrl}}/api/patients
+Content-Type: application/json
+
+{
+  "fullName": "A"
+}
+
+### 15. Adult with immunization records
+POST {{baseUrl}}/api/patients
+Content-Type: application/json
+
+{
+  "fullName": "Grown Man",
+  "dateOfBirth": "1980-01-01",
+  "gender": "MALE",
+  "village": "Ifite",
+  "lga": "Awka North",
+  "state": "Anambra",
+  "nextOfKinName": "Parent",
+  "nextOfKinPhone": "08071234567",
+  "phcId": "{{phcId}}",
+  "immunizations": [
+    { "vaccineName": "BCG", "dateGiven": "2020-01-01" }
+  ]
+}
+
+### 16. Vaccine given BEFORE birth
+POST {{baseUrl}}/api/patients
+Content-Type: application/json
+
+{
+  "fullName": "Time Traveller",
+  "dateOfBirth": "2025-08-01",
+  "gender": "MALE",
+  "village": "Ifite",
+  "lga": "Awka North",
+  "state": "Anambra",
+  "nextOfKinName": "Parent",
+  "nextOfKinPhone": "08071234567",
+  "phcId": "{{phcId}}",
+  "immunizations": [
+    { "vaccineName": "BCG", "dateGiven": "2025-07-01" }
+  ]
+}
+
+### 17. Next due date before date given
+POST {{baseUrl}}/api/patients
+Content-Type: application/json
+
+{
+  "fullName": "Dose Tester",
+  "dateOfBirth": "2025-08-01",
+  "gender": "MALE",
+  "village": "Ifite",
+  "lga": "Awka North",
+  "state": "Anambra",
+  "nextOfKinName": "Parent",
+  "nextOfKinPhone": "08071234567",
+  "phcId": "{{phcId}}",
+  "immunizations": [
+    { "vaccineName": "Penta", "dateGiven": "2025-09-15", "nextDueDate": "2025-09-01" }
+  ]
+}
+
+
+### 18. phcId is not a UUID 
+POST {{baseUrl}}/api/patients
+Content-Type: application/json
+
+{
+  "fullName": "Phc Tester",
+  "dateOfBirth": "1990-01-01",
+  "gender": "MALE",
+  "village": "Ifite",
+  "lga": "Awka North",
+  "state": "Anambra",
+  "nextOfKinName": "Parent",
+  "nextOfKinPhone": "08071234567",
+  "phcId": "abc"
+}
+
+
+
+### 19. Valid-looking but non-existent PHC (expect 404 "PHC not found")
+POST {{baseUrl}}/api/patients
+Content-Type: application/json
+
+{
+  "fullName": "Ghost Clinic Patient",
+  "dateOfBirth": "1990-01-01",
+  "gender": "MALE",
+  "village": "Ifite",
+  "lga": "Awka North",
+  "state": "Anambra",
+  "nextOfKinName": "Parent",
+  "nextOfKinPhone": "08071234567",
+  "phcId": "11111111-1111-4111-8111-111111111111"
+}
+
+
+
+### 20. List all (expect data array, newest first, pagination.total = number of patients)
+GET {{baseUrl}}/api/patients
+
+### 22. Search by name
+GET {{baseUrl}}/api/patients?q=ngozi
+
+### 23. Uppercase name still matches (case-insensitive)
+GET {{baseUrl}}/api/patients?q=OKAFOR
+
+### 24. Partial phone (expect Ngozi)
+GET {{baseUrl}}/api/patients?q=0803
+
+### 25. Phone typed with a space (expect Ngozi; spaces are stripped)
+GET {{baseUrl}}/api/patients?q=0803%20123
+
+### 26. Card number, lowercase (expect all ANK patients)
+GET {{baseUrl}}/api/patients?q=ank-0000
+
+### 27. NHIS number (expect Obiora only)
+GET {{baseUrl}}/api/patients?q=NHIS-001
+
+### 28. Pagination (expect 2 results, page 2, totalPages calculated)
+GET {{baseUrl}}/api/patients?limit=2&page=2
+
+### 29. Limit is capped at 50 (expect pagination.limit = 50, not 1000)
+GET {{baseUrl}}/api/patients?limit=1000
+
+### 30. No match (expect data [] and total 0, still status 200)
+GET {{baseUrl}}/api/patients?q=zzzzzz
+
+### 31. Garbage page value falls back to 1
+GET {{baseUrl}}/api/patients?page=abc
